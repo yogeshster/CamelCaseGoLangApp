@@ -1,4 +1,4 @@
-###Approach
+#Approach
 
 * Picks the longest found string in the dictionary and converts the same to title case (except the first word it finds)
 * In case of "onetwothree" the following happens
