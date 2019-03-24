@@ -12,8 +12,8 @@ import (
 	"github.com/patrickmn/go-cache"
 )
 
-var titleCaseCache = cache.New(300*time.Minute, 1440*time.Minute)
-var camelCaseCache = cache.New(300*time.Minute, 1440*time.Minute)
+var titleCaseCache = cache.New(60*time.Minute, 1440*time.Minute)
+var camelCaseCache = cache.New(60*time.Minute, 1440*time.Minute)
 
 func ConvertToCamelCase(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var input = strings.ToLower(ps.ByName("word"))
@@ -40,7 +40,7 @@ func ConvertToCamelCase(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 				currLen = (len(input))
 			} else if doesWordExistInDictionary(currWord) {
 				var equivalentTitleCase = strings.Title(currWord)
-				titleCaseCache.Set(currWord, equivalentTitleCase, cache.NoExpiration)
+				titleCaseCache.Set(currWord, equivalentTitleCase, cache.DefaultExpiration)
 				if firstWord {
 					firstWord = false
 					result += currWord
@@ -59,7 +59,7 @@ func ConvertToCamelCase(w http.ResponseWriter, r *http.Request, ps httprouter.Pa
 		}
 
 		if result != "" {
-			camelCaseCache.Set(input, result, cache.NoExpiration)
+			camelCaseCache.Set(input, result, cache.DefaultExpiration)
 		}
 
 		fmt.Fprintf(w, result)
